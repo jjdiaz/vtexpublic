@@ -1,0 +1,1286 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "CDE - Container API",
+    "description": "API container provide access to Productsup feature through a proxified access",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/buckets/delete/{remoteFile}": {
+      "delete": {
+        "tags": [
+          "Buckets"
+        ],
+        "summary": "Delete file from bucket.",
+        "operationId": "bucket_delete_file",
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "File has been deleted from bucket."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "File has been deleted from bucket."
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "properties": {
+                        "remoteFile": {
+                          "type": "string",
+                          "example": "Not a valid file path."
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "remoteFile": "Not a valid file path."
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Validation failed",
+                    "errors": {
+                      "remoteFile": "Not a valid file path."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/buckets/exchange/download/{remoteFile}": {
+      "get": {
+        "tags": [
+          "Buckets"
+        ],
+        "summary": "Download file from the Bucket to exchange folder",
+        "operationId": "bucket_exchange_download",
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "File has been downloaded."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "File has been downloaded."
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "properties": {
+                        "remoteFile": {
+                          "type": "string",
+                          "example": "Not a valid file path."
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "remoteFile": "Not a valid file path."
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Validation failed",
+                    "errors": {
+                      "remoteFile": "Not a valid file path."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/buckets/exchange/upload/{remoteFile}": {
+      "put": {
+        "tags": [
+          "Buckets"
+        ],
+        "summary": "Upload file from exchange folder to the Bucket",
+        "operationId": "bucket_exchange_upload",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/bucket_exchange_upload_input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "File has been uploaded."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "File has been uploaded."
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "properties": {
+                        "sourceFile": {
+                          "type": "string",
+                          "example": "File not found."
+                        },
+                        "remoteFile": {
+                          "type": "string",
+                          "example": "Not a valid file path."
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "sourceFile": "File not found.",
+                        "remoteFile": "Not a valid file path."
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Validation failed",
+                    "errors": {
+                      "sourceFile": "File not found.",
+                      "remoteFile": "Not a valid file path."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/output/{type}/close": {
+      "post": {
+        "tags": [
+          "File",
+          "Write"
+        ],
+        "summary": "Close output file",
+        "description": "Although this route works, it is intended to be use by a CLI command for maintenance reasons",
+        "operationId": "close_output_file",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^output|feedback$"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/items/{type}/count": {
+      "get": {
+        "tags": [
+          "File",
+          "Read"
+        ],
+        "summary": "Fetch row count for specified file",
+        "description": "Will return the row count of the file.",
+        "operationId": "items_count_input_file",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^full|new|modified|unchanged|deleted$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Items counted successfully."
+                    },
+                    "data": {
+                      "properties": {
+                        "count": {
+                          "type": "integer",
+                          "example": 3
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "count": 3
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Items counted successfully.",
+                    "data": {
+                      "count": 3
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/logs/{level}": {
+      "post": {
+        "tags": [
+          "Log"
+        ],
+        "summary": "Write to log.",
+        "operationId": "write_log",
+        "parameters": [
+          {
+            "name": "level",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^debug|info|notice|warning|error|critical|alert|emergency|success|report$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/write_log_input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Written successfully."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Written successfully."
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "This value should not be blank."
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "message": "This value should not be blank."
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Validation failed",
+                    "errors": {
+                      "message": "This value should not be blank."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/ping": {
+      "get": {
+        "tags": [
+          "Misc"
+        ],
+        "summary": "Check if the server is live.",
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "pong"
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "pong"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/processes/log": {
+      "post": {
+        "tags": [
+          "Process"
+        ],
+        "summary": "Log all processes to internal log",
+        "description": "Log all processes to internal log",
+        "operationId": "log_all_processes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Written successfully."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Written successfully."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/processes/pending": {
+      "get": {
+        "tags": [
+          "Process"
+        ],
+        "summary": "Show pending processes",
+        "description": "Display pending processes details",
+        "operationId": "show_pending_processes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "4960a3b5-732e-4b38-9541-cb75ed4c9e07"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "running"
+                          },
+                          "exit-code": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "seconds-remaining": {
+                            "type": "integer",
+                            "example": 21600
+                          }
+                        },
+                        "type": "object",
+                        "example": {
+                          "id": "4960a3b5-732e-4b38-9541-cb75ed4c9e07",
+                          "status": "running",
+                          "exit-code": 1,
+                          "seconds-remaining": 21600
+                        }
+                      },
+                      "example": [
+                        {
+                          "id": "4960a3b5-732e-4b38-9541-cb75ed4c9e07",
+                          "status": "running",
+                          "exit-code": 1,
+                          "seconds-remaining": 21600
+                        },
+                        {
+                          "id": "19c35ae8-53aa-4516-81ca-779f0dc54ad3",
+                          "status": "running",
+                          "exit-code": null,
+                          "seconds-remaining": 21600
+                        }
+                      ]
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "data": [
+                      {
+                        "id": "4960a3b5-732e-4b38-9541-cb75ed4c9e07",
+                        "status": "running",
+                        "exit-code": 1,
+                        "seconds-remaining": 21600
+                      },
+                      {
+                        "id": "19c35ae8-53aa-4516-81ca-779f0dc54ad3",
+                        "status": "running",
+                        "exit-code": null,
+                        "seconds-remaining": 21600
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/processes/{uuid}": {
+      "get": {
+        "tags": [
+          "Process"
+        ],
+        "summary": "Show a process.",
+        "description": "Display process details",
+        "operationId": "show_process",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "daaa91e0-8f28-4f0d-8585-0e1f06c5f957"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "running"
+                        },
+                        "exit-code": {
+                          "type": "integer",
+                          "example": 12
+                        },
+                        "seconds-remaining": {
+                          "type": "integer",
+                          "example": 21600
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "id": "daaa91e0-8f28-4f0d-8585-0e1f06c5f957",
+                        "status": "running",
+                        "exit-code": 12,
+                        "seconds-remaining": 21600
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "data": {
+                      "id": "daaa91e0-8f28-4f0d-8585-0e1f06c5f957",
+                      "status": "running",
+                      "exit-code": 12,
+                      "seconds-remaining": 21600
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Process not found."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Process not found."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/input/{type}/next_batch": {
+      "get": {
+        "tags": [
+          "File",
+          "Read"
+        ],
+        "summary": "Fetch the next batch from the specified file",
+        "description": "Will return the next batch of items from the file, if no more: empty response.",
+        "operationId": "read_input_file_next_batch",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^full|new|modified|unchanged|deleted$"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of the batch (should be 0 < size < 1000), default 1",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "show-hidden",
+            "in": "query",
+            "description": "Show or hide columns with double underscore in name. Hidden by default",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      },
+                      "example": [
+                        {
+                          "id": "1",
+                          "name": "first product"
+                        }
+                      ]
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "data": [
+                      {
+                        "id": "1",
+                        "name": "first product"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Size should be an integer."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Size should be an integer."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Requested file not provided."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Requested file not provided."
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid file."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Invalid file."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/input/{type}/next": {
+      "get": {
+        "tags": [
+          "File",
+          "Read"
+        ],
+        "summary": "Fetch the next item from the specified file",
+        "description": "Will return the next item from the file, if no more: no-content response.",
+        "operationId": "read_input_file_next",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^full|new|modified|unchanged|deleted$"
+            }
+          },
+          {
+            "name": "show-hidden",
+            "in": "query",
+            "description": "Show or hide columns with double underscore in name. Hidden by default",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "id": "1",
+                        "name": "first product"
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "data": {
+                      "id": "1",
+                      "name": "first product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Requested file not provided."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Requested file not provided."
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid file."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Invalid file."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/input/{type}/restart": {
+      "get": {
+        "tags": [
+          "File",
+          "Read"
+        ],
+        "summary": "Reset the cursor for specified file",
+        "description": "Resetting the cursor means the next item/batch will start from the beginning again",
+        "operationId": "restart_cursor_input_file",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^full|new|modified|unchanged|deleted$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/storage/internal": {
+      "post": {
+        "tags": [
+          "File",
+          "Storage"
+        ],
+        "summary": "Store folder content to internal storage",
+        "operationId": "store_to_internal_storage",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/store_to_internal_storage_input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Upload process started. You can check the status of the process via api with the given id."
+                    },
+                    "data": {
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "24f0b9ff-e445-4da1-ac31-55ca31e6ac5b"
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "id": "24f0b9ff-e445-4da1-ac31-55ca31e6ac5b"
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Upload process started. You can check the status of the process via api with the given id.",
+                    "data": {
+                      "id": "24f0b9ff-e445-4da1-ac31-55ca31e6ac5b"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "properties": {
+                        "sourceFile": {
+                          "type": "string",
+                          "example": "File not found."
+                        },
+                        "remoteFile": {
+                          "type": "string",
+                          "example": "Not a valid file path."
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "sourceFile": "File not found.",
+                        "remoteFile": "Not a valid file path."
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Validation failed",
+                    "errors": {
+                      "sourceFile": "File not found.",
+                      "remoteFile": "Not a valid file path."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/store/to-transport": {
+      "post": {
+        "tags": [
+          "File",
+          "Storage"
+        ],
+        "summary": "Store folder content to transport",
+        "operationId": "store_to_transport",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/store_to_transport_input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Upload process started. You can check the status of the process via api with the given id."
+                    },
+                    "data": {
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "de46b26d-7c38-49db-882b-874c2a77b846"
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "id": "de46b26d-7c38-49db-882b-874c2a77b846"
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Upload process started. You can check the status of the process via api with the given id.",
+                    "data": {
+                      "id": "de46b26d-7c38-49db-882b-874c2a77b846"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "properties": {
+                        "sourceFile": {
+                          "type": "string",
+                          "example": "File not found."
+                        },
+                        "remoteFile": {
+                          "type": "string",
+                          "example": "Not a valid file path."
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "sourceFile": "File not found.",
+                        "remoteFile": "Not a valid file path."
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Validation failed",
+                    "errors": {
+                      "sourceFile": "File not found.",
+                      "remoteFile": "Not a valid file path."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/output/{type}": {
+      "post": {
+        "tags": [
+          "File",
+          "Write"
+        ],
+        "summary": "Write to output file",
+        "operationId": "write_to_output_file",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^output|feedback$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/write_to_output_file_input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Written successfully."
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Written successfully."
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "properties": {
+                        "data": {
+                          "type": "string",
+                          "example": "This value should be an array of items."
+                        }
+                      },
+                      "type": "object",
+                      "example": {
+                        "data": "This value should be an array of items."
+                      }
+                    }
+                  },
+                  "type": "object",
+                  "example": {
+                    "message": "Validation failed",
+                    "errors": {
+                      "data": "This value should be an array of items."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "bucket_exchange_upload_input": {
+        "properties": {
+          "source_file": {
+            "type": "string",
+            "example": "/example-subdirectory/example_file.txt"
+          }
+        },
+        "type": "object",
+        "example": {
+          "source_file": "/example-subdirectory/example_file.txt"
+        }
+      },
+      "write_log_input": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Success message"
+          },
+          "context": {
+            "type": "object",
+            "example": {
+              "code": 10
+            }
+          }
+        },
+        "type": "object",
+        "example": {
+          "message": "Success message",
+          "context": {
+            "code": 10
+          }
+        }
+      },
+      "store_to_internal_storage_input": {
+        "properties": {
+          "source_file": {
+            "type": "string",
+            "example": "/example-subdirectory/example_file.txt"
+          },
+          "remote_file": {
+            "type": "string",
+            "example": "/remote-folder/remote_file.txt"
+          }
+        },
+        "type": "object",
+        "example": {
+          "source_file": "/example-subdirectory/example_file.txt",
+          "remote_file": "/remote-folder/remote_file.txt"
+        }
+      },
+      "store_to_transport_input": {
+        "properties": {
+          "source_file": {
+            "type": "string",
+            "example": "/example-subdirectory/example_file.txt"
+          },
+          "remote_file": {
+            "type": "string",
+            "example": "/remote-folder/remote_file.txt"
+          }
+        },
+        "type": "object",
+        "example": {
+          "source_file": "/example-subdirectory/example_file.txt",
+          "remote_file": "/remote-folder/remote_file.txt"
+        }
+      },
+      "write_to_output_file_input": {
+        "properties": {
+          "meta": {
+            "properties": {
+              "separator": {
+                "type": "string",
+                "example": "-"
+              }
+            },
+            "type": "object",
+            "example": {
+              "separator": "-"
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "example": [
+              {
+                "id": 1,
+                "taxon-0-id": 11,
+                "taxon-0-name": "taxon0"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "example": {
+          "meta": {
+            "separator": "-"
+          },
+          "data": [
+            {
+              "id": 1,
+              "taxon-0-id": 11,
+              "taxon-0-name": "taxon0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
