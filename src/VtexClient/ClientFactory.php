@@ -19,7 +19,7 @@ class ClientFactory
     public function build(): Client
     {
         $config = [
-            'base_uri' => "https://developers.vtex.com",
+            'base_uri' => "https://" . $_ENV['VTEX_ACCOUNT_NAME'] . '.' . $_ENV['VTEX_ENVIROMENT'] ,
             'headers' => [
                 'Accept' => "application/json",
                 'Content-Type' => "application/json",
