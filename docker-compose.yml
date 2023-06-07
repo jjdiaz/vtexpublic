@@ -1,0 +1,27 @@
+version: '3.4'
+services:
+  php:
+#    image: php:7.4-cli
+    build: ./
+    environment:
+      XDEBUG_CONFIG: remote_host=${MYPCIP} #La variable MYPCIP sale directamente del .env la de casa es 192.168.100.110 que la de tu pc
+      XDEBUG_MODE: ${XDEBUG_MODE}
+      XDEBUG_CLIENT_HOST: ${MYPCIP} #Esta variable (MYPCIP) de entorno .env se le pasa al fichero xdebug.ini para que el XDebug en el FPM funcione
+      XDEBUG_CLIENT_PORT: ${XDEBUG_CLIENT_PORT}
+      XDEBUG_IDE_KEY: ${XDEBUG_IDE_KEY}
+    ports:
+      - "9000:9001"
+    expose:
+      - 9001
+      - 9003
+    volumes:
+      - './:/cde/app:cached'
+#      - '../data/imports/:/srv/app/var/imports:cached'
+#      - '../data/exports/:/srv/app/var/exports:cached'
+#      - './docker/php/php.ini:/usr/local/etc/php/php.ini'
+      - './docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+
+###> doctrine/doctrine-bundle ###
+
+networks:
+   php:
