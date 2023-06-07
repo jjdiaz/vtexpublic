@@ -9,7 +9,7 @@ class ClientFactory
     public function build(): Client
     {
         $httpClient = new \GuzzleHttp\Client([
-            'base_uri' => 'http://cde-container-api',
+            'base_uri' => $_ENV['CLIENT_BASE_URI'],
         ]);
 
         return Client::create($httpClient);

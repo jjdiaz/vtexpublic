@@ -11,5 +11,7 @@ services:
 
     App\ContainerApi\ContainerApiFacade: '@App\Tests\Mocks\MockContainerApi'
 
-    GuzzleHttp\HandlerStack:
-        synthetic: true
+#    GuzzleHttp\HandlerStack:
+#        synthetic: true
+    GuzzleHttp\Client:
+        factory: ['@App\VtexClient\ClientFactory', 'build']

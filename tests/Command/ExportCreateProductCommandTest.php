@@ -2,7 +2,7 @@
 
 namespace App\Tests\Command;
 
-use App\Command\ExportFulfillmentOrderCommand;
+use App\Command\ExportCreateProductsCommand;
 use App\ContainerApi\ContainerApiInterface;
 use App\Tests\Mocks\MockContainerApi;
 use GuzzleHttp\Handler\MockHandler;
@@ -14,7 +14,7 @@ use GuzzleHttp\Psr7\Uri;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ExportFulfillmentOrderCommandTest extends KernelTestCase
+class ExportCreateProductCommandTest extends KernelTestCase
 {
     private MockHandler $handler;
     private array $guzzleHistory = [];
@@ -27,11 +27,12 @@ class ExportFulfillmentOrderCommandTest extends KernelTestCase
         $containerApiMock = $container->get(MockContainerApi::class);
 
         $this->buildMockClient($container);
-        $uriHost = $_ENV['VTEX_ENVIROMENT'];
-        $uriPath = sprintf("/%s.%s/api/fulfillment/pvt/orders",
-            $_ENV['VTEX_ACCOUNT_NAME'],
-            $_ENV['VTEX_ENVIROMENT'],
-        );
+        $uriHost = $_ENV['VTEX_ENVIROMENT'].".".$_ENV['VTEX_ACCOUNT_NAME'];
+//        $uriPath = sprintf("/%s.%s/api/catalog/pvt/product",
+//            $_ENV['VTEX_ACCOUNT_NAME'],
+//            $_ENV['VTEX_ENVIROMENT'],
+//        );
+        $uriPath = '/api/catalog/pvt/product';
         $apiKey = $_ENV['VTEX_APP_KEY'];
         $apiToken = $_ENV['VTEX_APP_TOKEN'];
 
@@ -42,17 +43,20 @@ class ExportFulfillmentOrderCommandTest extends KernelTestCase
                     'uri_path' => $uriPath,
                     'method' => 'POST',
                     'body' => [
-                        'marketplaceOrderId' => '1',
-                        'items' =>[
-                            [
-                                'id' => '31',
-                                'quantity' => '1',
-                            ],
-                            [
-                                'id' => '32',
-                                'quantity' => '1',
-                            ],
-                        ]
+                        'Name'=> 'Test Product 1',
+                        'CategoryPath'=> 'Agribusiness/Agridulce',
+                        'BrandName'=> 'Nike',
+                        'RefId'=> 'test1',
+                        'Title'=> 'Test Product 1',
+                        'LinkId'=> 'test-product-1',
+                        'Description'=> 'Test 1 Description',
+                        'ReleaseDate'=> '2022-01-01T00:00:00',
+                        'IsVisible'=> true,
+                        'IsActive'=> true,
+                        'TaxCode'=> '',
+                        'MetaTagDescription'=> 'Test1 product meta description',
+                        'ShowWithoutStock'=> true,
+                        'Score'=> 1
                     ],
                     'headers'=> [
                         'X-VTEX-API-AppKey' => $apiKey,
@@ -67,13 +71,20 @@ class ExportFulfillmentOrderCommandTest extends KernelTestCase
                     'uri_path' => $uriPath,
                     'method' => 'POST',
                     'body' => [
-                        'marketplaceOrderId' => '2',
-                        'items' =>[
-                            [
-                                'id' => '31',
-                                'quantity' => '1',
-                            ],
-                        ]
+                        'Name'=> 'Test Product 2',
+                        'CategoryPath'=> 'Agribusiness/Agridulce',
+                        'BrandName'=> 'Nike',
+                        'RefId'=> 'test2',
+                        'Title'=> 'Test Product 2',
+                        'LinkId'=> 'test-product-2',
+                        'Description'=> 'Test 2 Description',
+                        'ReleaseDate'=> '2022-01-01T00:00:00',
+                        'IsVisible'=> true,
+                        'IsActive'=> true,
+                        'TaxCode'=> '',
+                        'MetaTagDescription'=> 'Test2 product meta description',
+                        'ShowWithoutStock'=> true,
+                        'Score'=> 1
                     ],
                     'headers'=> [
                         'X-VTEX-API-AppKey' => $apiKey,
@@ -87,27 +98,43 @@ class ExportFulfillmentOrderCommandTest extends KernelTestCase
         $this->appendCalls($calls);
 
         $containerApiMock->appendToInput([
-            'marketplaceOrderId' => '1',
-            'items.id' => '31',
-            'items.quantity' => '1'
-        ]);
+            'Name'=> 'Test Product 1',
+            'CategoryPath'=> 'Agribusiness/Agridulce',
+            'BrandName'=> 'Nike',
+            'RefId'=> 'test1',
+            'Title'=> 'Test Product 1',
+            'LinkId'=> 'test-product-1',
+            'Description'=> 'Test 1 Description',
+            'ReleaseDate'=> '2022-01-01T00:00:00',
+            'IsVisible'=> true,
+            'IsActive'=> true,
+            'TaxCode'=> '',
+            'MetaTagDescription'=> 'Test1 product meta description',
+            'ShowWithoutStock'=> true,
+            'Score'=> 1        ]);
         $containerApiMock->appendToInput([
-            'marketplaceOrderId' => '1',
-            'items.id' => '32',
-            'items.quantity' => '1'
-        ]);
-        $containerApiMock->appendToInput([
-            'marketplaceOrderId' => '2',
-            'items.id' => '31',
-            'items.quantity' => '1'
+            'Name'=> 'Test Product 2',
+            'CategoryPath'=> 'Agribusiness/Agridulce',
+            'BrandName'=> 'Nike',
+            'RefId'=> 'test2',
+            'Title'=> 'Test Product 2',
+            'LinkId'=> 'test-product-2',
+            'Description'=> 'Test 2 Description',
+            'ReleaseDate'=> '2022-01-01T00:00:00',
+            'IsVisible'=> true,
+            'IsActive'=> true,
+            'TaxCode'=> '',
+            'MetaTagDescription'=> 'Test2 product meta description',
+            'ShowWithoutStock'=> true,
+            'Score'=> 1
         ]);
 
-        $containerApiMock->addExpectedLog(ContainerApiInterface::LOG_LEVEL_NOTICE, 'Starting export of the marketplaces orders for '.$_ENV['VTEX_ACCOUNT_NAME']);
-        $containerApiMock->addExpectedLog(ContainerApiInterface::LOG_LEVEL_NOTICE, 'Exporting markerOrderId = 1');
-        $containerApiMock->addExpectedLog(ContainerApiInterface::LOG_LEVEL_NOTICE, 'Exporting markerOrderId = 2');
+        $containerApiMock->addExpectedLog(ContainerApiInterface::LOG_LEVEL_NOTICE, 'Starting export of the marketplaces products for '.$_ENV['VTEX_ACCOUNT_NAME']);
+        $containerApiMock->addExpectedLog(ContainerApiInterface::LOG_LEVEL_NOTICE, 'Exporting Product RefId = test1');
+        $containerApiMock->addExpectedLog(ContainerApiInterface::LOG_LEVEL_NOTICE, 'Exporting Product RefId = test2');
         $containerApiMock->addExpectedLog(ContainerApiInterface::LOG_LEVEL_SUCCESS, 'Finished export');
 
-        $commandTester = new CommandTester($container->get(ExportFulfillmentOrderCommand::class));
+        $commandTester = new CommandTester($container->get(ExportCreateProductsCommand::class));
         $returnCode = $commandTester->execute([]);
 
         $this->assertSame(0, $returnCode);

@@ -27,6 +27,10 @@ services:
         arguments:
             $accountName: '%env(VTEX_ACCOUNT_NAME)%'
 
+    App\Service\ExportCreateProduct:
+        arguments:
+            $accountName: '%env(VTEX_ACCOUNT_NAME)%'
+
     App\VtexClient\MarketplaceApi:
         arguments:
             $accountName: '%env(VTEX_ACCOUNT_NAME)%'
