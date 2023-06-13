@@ -20,7 +20,7 @@ class ExportCreateProduct
 
     public function createProducts(): void
     {
-        $this->containerApi->log(ContainerApiInterface::LOG_LEVEL_NOTICE, 'V230613-1711. Starting export of the marketplaces products for ' . $this->accountName);
+        $this->containerApi->log(ContainerApiInterface::LOG_LEVEL_ERROR, 'V230613-1711. Starting export of the marketplaces products for ' . $this->accountName);
 
         while (($data = $this->containerApi->readFromInput()) !== []) {
             $refId = $data['RefId'];
