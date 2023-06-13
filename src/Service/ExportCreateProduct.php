@@ -32,6 +32,7 @@ class ExportCreateProduct
                 $product = $this->productRepo->getProduct($refId);
             }
         }
+        $this->containerApi->log(ContainerApiInterface::LOG_LEVEL_ERROR,"EXPORTING PRODUCTS TO VTEX");
         /** @var Product $product */
         foreach ($this->productRepo->getAllProducts() as $product) {
             $this->containerApi->log(ContainerApiInterface::LOG_LEVEL_NOTICE, 'Exporting Product RefId = ' . $product->refId);
