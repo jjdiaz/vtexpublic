@@ -3,8 +3,6 @@
 namespace App\Command;
 
 use App\Service\ExportCreateProduct;
-use App\Service\ExportFulfillmentOrder;
-use App\Service\InsertProducts;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
