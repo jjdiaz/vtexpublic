@@ -21,8 +21,9 @@ class ExportCreateProductsCommand extends Command
     {
         $this
             ->setName("export:create:product")
-            ->addArgument('test_argument',InputArgument::OPTIONAL,'Test Argument');
-
+            ->addArgument('vtex_account_name',InputArgument::REQUIRED,'Account Name')
+            ->addArgument('vtex_app_key',InputArgument::REQUIRED,'Api Key')
+            ->addArgument('vtex_app_token',InputArgument::REQUIRED,'App Token');
     }
 
 

@@ -20,7 +20,7 @@ class ExportCreateProduct
 
     public function createProducts(): void
     {
-        $this->containerApi->log(ContainerApiInterface::LOG_LEVEL_ERROR, 'V230613-1711. Starting export of the marketplaces products for ' . $this->accountName);
+        $this->containerApi->log(ContainerApiInterface::LOG_LEVEL_NOTICE, 'V230613-1711. Starting export of the marketplaces products for ' . $this->accountName);
 
         while (($data = $this->containerApi->readFromInput()) !== []) {
             $refId = $data['RefId'];
@@ -32,7 +32,7 @@ class ExportCreateProduct
                 $product = $this->productRepo->getProduct($refId);
             }
         }
-        $this->containerApi->log(ContainerApiInterface::LOG_LEVEL_ERROR,"EXPORTING PRODUCTS TO VTEX");
+        $this->containerApi->log(ContainerApiInterface::LOG_LEVEL_NOTICE,"EXPORTING PRODUCTS TO VTEX");
         /** @var Product $product */
         foreach ($this->productRepo->getAllProducts() as $product) {
             $this->containerApi->log(ContainerApiInterface::LOG_LEVEL_NOTICE, 'Exporting Product RefId = ' . $product->refId);
