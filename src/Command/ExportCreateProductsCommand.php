@@ -29,7 +29,6 @@ class ExportCreateProductsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $argument = $input->getArgument('test_argument');
         $this->createProduct->createProducts();
 
         return Command::SUCCESS;
